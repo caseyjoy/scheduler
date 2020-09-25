@@ -1,6 +1,27 @@
 import React from "react";
 
 import "components/Application.scss";
+import DayList from "./DayList.jsx";
+
+
+const days = [
+  {
+    id: 1,
+    name: "Monday",
+    spots: 2,
+  },
+  {
+    id: 2,
+    name: "Tuesday",
+    spots: 5,
+  },
+  {
+    id: 3,
+    name: "Wednesday",
+    spots: 0,
+  },
+];
+
 
 export default function Application(props) {
   return (
@@ -8,6 +29,7 @@ export default function Application(props) {
       <section className="sidebar">
         {
           <>
+            <DayList days={days} day={"Monday"} />
             <img
               className="sidebar--centered"
               src="images/logo.png"
