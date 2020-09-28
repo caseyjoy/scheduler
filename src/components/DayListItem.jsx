@@ -6,7 +6,6 @@ import classnames from "classnames";
 import "components/DayListItem.scss";
 
 function formatSpots(spots) {
-  
   spots = Number(spots)
 
   switch (spots) {
