@@ -14,6 +14,9 @@ export default function DayList(props) {
   // TODO: Figure out why there's sometimes no list of days
   //if(props.days === undefined) alert("no props.days")
 
+  console.log(props.days)
+
+  if (props.days !== []){
   listOfDays = props.days.map((day) => (
     <DayListItem
       key={"day_"+day.id}
@@ -23,6 +26,7 @@ export default function DayList(props) {
       setDay={props.setDay}
     />
   ));
+  }
 
   return <ul>{listOfDays}</ul>;
 }

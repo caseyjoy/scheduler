@@ -1,18 +1,16 @@
-import React,  { useState } from "react";
+import React from "react";
 // import classnames from "classnames";
 
 import InterviewerListItem from "./InterviewerListItem.jsx";
 import "components/InterviewerList.scss";
 
 export default function InterviewerList(props) {
-  const [selectedInterviewer, setSelectedInterviewer] = useState(props.interviewer);
-
   const formattedInterviewers = props.interviewers.map(interviewer => 
     <InterviewerListItem
       {...interviewer}
       key={"interviewer_"+interviewer.id}
-      selected={selectedInterviewer === interviewer.id ? "selected" : undefined} 
-      setSelectedInterviewer={setSelectedInterviewer}
+      selected={props.selectedInterviewer === interviewer.id ? "selected" : undefined} 
+      setInterviewer={props.setInterviewer}
     />
   );
 
