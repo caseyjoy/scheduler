@@ -18,7 +18,7 @@ import Show from "components/Appointment/Show.jsx";
 import Confirm from "components/Appointment/Confirm.jsx";
 import Status from "components/Appointment/Status.jsx";
 import Error from "components/Appointment/Error.jsx";
-import Create from "components/Appointment/Create.jsx";
+import Form from "components/Appointment/Form.jsx";
 
 storiesOf("Button", module)
   .addParameters({
@@ -175,8 +175,8 @@ storiesOf("Appointment", module)
       onClose={action("onClose")}
     />
   ))
-  .add("Create", () => (
-    <Create
+  .add("Form", () => (
+    <Form
       name="Lydia Miller-Jones"
       interviewers={interviewers}
       interviewer={interviewers[0]}

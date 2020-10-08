@@ -5,7 +5,7 @@ import InterviewerList from "components/InterviewerList.jsx";
 
 
 
-export default function Create (props) {
+export default function Form (props) {
   const [name, setName] = useState(props.name || "");
   const [selectedInterviewer, setInterviewer]  = useState(props.interviewer || null);
 
@@ -24,6 +24,9 @@ export default function Create (props) {
     setName(event.target.value);
   }
 
+  function save(event){
+    props.onSave(name, selectedInterviewer);
+  }
   
 
   return (
@@ -53,7 +56,7 @@ export default function Create (props) {
             Cancel
           </Button>
 
-          <Button confirm onClick={props.onSave}>
+          <Button confirm onClick={save}>
             Save
           </Button>
         </section>

@@ -13,4 +13,19 @@ function getAppointmentsForDay(state, newDay) {
   }
 }
 
-export { getAppointmentsForDay };
+function getInterviewersForDay(state, newDay){
+  const search = state.days.filter((day) => day.name === newDay);
+
+  if (search.length > 0) {
+    const appList = search[0].interviewers;
+    return appList.reduce(function (result, a) {
+      if (a !== []) result.push(state.interviewers[a]);
+      return result;
+    }, []);
+    
+  } else {
+    return [];
+  }
+}
+
+export { getAppointmentsForDay, getInterviewersForDay };

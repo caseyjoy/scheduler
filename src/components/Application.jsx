@@ -6,9 +6,10 @@ import "components/Application.scss";
 import DayList from "./DayList.jsx";
 import Appointment from "components/Appointment/index.jsx";
 import Status from "components/Appointment/Status.jsx";
-import { getAppointmentsForDay } from "helpers/selectors.js";
-
-
+import {
+  getAppointmentsForDay,
+  getInterviewersForDay,
+} from "helpers/selectors.js";
 
 export default function Application(props) {
   const [state, setState] = useState({
@@ -18,15 +19,13 @@ export default function Application(props) {
     interviewers: null,
   });
 
-
   function setDay(day) {
     setState({ ...state, day: day });
   }
 
-  /*  const [day, setDay] = useState("Monday");
-  const [days, setDays] = useState([]); */
-
-  //const setDay = (day) => { setState({...state, day: day}) }
+  function bookInterview(id, interview) {
+    console.log(id, interview);
+  }  
 
   useEffect(() => {
     const first = axios.get("http://localhost:8001/api/days");
@@ -45,43 +44,32 @@ export default function Application(props) {
         days: first.data,
         appointments: second.data,
         interviewers: third.data,
-      })
-    })
+      });
+    });
   }, []);
 
   let appointments = [];
   if (!state.appointments) {
     appointments.push(<Status key="empty" message="Loading appointments..." />);
-  }  else {
+  } else {
     const selectedDayAppointments = getAppointmentsForDay(state, state.day);
+    const selectedDayInterviewers = getInterviewersForDay(state, state.day);
 
     for (const appointment of selectedDayAppointments) {
-      console.log("appointment",appointment)
+      console.log("appointment", appointment);
 
       appointments.push(
-      <Appointment 
-      key={"appointment_"+appointment.id+"_"+appointment.time}
-            id={appointment.id}
-            time={appointment.time}
-            interview={appointment.interview}
-            interviewers={state.interviewers}
-          />
-      )
+        <Appointment
+          key={"appointment_" + appointment.id + "_" + appointment.time}
+          id={appointment.id}
+          time={appointment.time}
+          interview={appointment.interview}
+          interviewers={selectedDayInterviewers}
+          bookInterview={bookInterview}
+        />
+      );
     }
-    /* 
-    
-      
-      
-
-      
-        
-          
-            
-        );
-           }   */
-    
-  } 
-
+  }
 
 
   return (
@@ -96,14 +84,7 @@ export default function Application(props) {
             />
             <hr className="sidebar__separator sidebar--centered" />
             <nav className="sidebar__menu">
-              <DayList
-                days={state.days}
-                day={state.day}
-                setDay={setDay}
-
-
-
-              />
+              <DayList days={state.days} day={state.day} setDay={setDay} />
             </nav>
             <img
               className="sidebar__lhl sidebar--centered"
