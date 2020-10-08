@@ -1,5 +1,9 @@
 # Interview Scheduler
 
+## About
+Scheduler is a simple "meeting scheduler" style practice application, worked on in a Lighthouse Labs course.
+
+
 ## Setup
 
 Install dependencies with `npm install`.
@@ -21,3 +25,5 @@ npm test
 ```sh
 npm run storybook
 ```
+## Data server
+You will also need (https://github.com/lighthouse-labs/scheduler-api) if you want the data to show up.
