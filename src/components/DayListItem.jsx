@@ -19,7 +19,7 @@ function formatSpots(spots) {
 }
 
 export default function DayListItem(props) {
-  console.log("TYPE:", props.spots, props.spots === 0)
+  //console.log("TYPE:", props.spots, props.spots === 0)
   const spots = Number(props.spots)
   const formattedSpots = formatSpots(spots);
 

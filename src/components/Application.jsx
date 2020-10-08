@@ -6,59 +6,83 @@ import "components/Application.scss";
 import DayList from "./DayList.jsx";
 import Appointment from "components/Appointment/index.jsx";
 import Status from "components/Appointment/Status.jsx";
-import getAppointmentsForDay from "helpers/selectors.jsx";
+import { getAppointmentsForDay } from "helpers/selectors.js";
 
-/* const interviewers = [
-  { id: 1, name: "Sylvia Palmer", avatar: "https://i.imgur.com/LpaY82x.png" },
-  { id: 2, name: "Tori Malcolm", avatar: "https://i.imgur.com/Nmx0Qxo.png" },
-  { id: 3, name: "Mildred Nazir", avatar: "https://i.imgur.com/T2WwVfS.png" },
-  { id: 4, name: "Cohana Roy", avatar: "https://i.imgur.com/FK8V841.jpg" },
-  { id: 5, name: "Sven Jones", avatar: "https://i.imgur.com/twYrpay.jpg" },
-]; */
 
-/* function setDay (day){
-  console.log(day);
-} */
 
 export default function Application(props) {
   const [state, setState] = useState({
-    day: "monday",
+    day: "Monday",
     days: [],
     appointments: null,
+    interviewers: null,
   });
+
+
+  function setDay(day) {
+    setState({ ...state, day: day });
+  }
+
   /*  const [day, setDay] = useState("Monday");
   const [days, setDays] = useState([]); */
+
+  //const setDay = (day) => { setState({...state, day: day}) }
 
   useEffect(() => {
     const first = axios.get("http://localhost:8001/api/days");
     const second = axios.get("http://localhost:8001/api/appointments");
+    const third = axios.get("http://localhost:8001/api/interviewers");
 
-    Promise.all([Promise.resolve(first), Promise.resolve(second)]).then(
-      (all) => {
-        console.log("All:", all);
-        const [first, second] = all;
-        setState({ days: first.data, appointments: second.data });
-      }
-    );
+    Promise.all([
+      Promise.resolve(first),
+      Promise.resolve(second),
+      Promise.resolve(third),
+    ]).then((all) => {
+      //console.log("All:", all);
+      const [first, second, third] = all;
+      setState({
+        ...state,
+        days: first.data,
+        appointments: second.data,
+        interviewers: third.data,
+      })
+    })
   }, []);
 
   let appointments = [];
   if (!state.appointments) {
     appointments.push(<Status key="empty" message="Loading appointments..." />);
-  } else {
-    for (let a in state.appointments) {
-      const tempAppointment = state.appointments[a]; 
-      console.log("appointment:",tempAppointment)
+  }  else {
+    const selectedDayAppointments = getAppointmentsForDay(state, state.day);
+
+    for (const appointment of selectedDayAppointments) {
+      console.log("appointment",appointment)
+
       appointments.push(
-        <Appointment
-          key={"appointment" + "_" + tempAppointment.id + "_" + tempAppointment.time}
-          id={tempAppointment.id}
-          time={tempAppointment.time}
-          interview={tempAppointment.interview}
-        />
-      );
+      <Appointment 
+      key={"appointment_"+appointment.id+"_"+appointment.time}
+            id={appointment.id}
+            time={appointment.time}
+            interview={appointment.interview}
+            interviewers={state.interviewers}
+          />
+      )
     }
-  }
+    /* 
+    
+      
+      
+
+      
+        
+          
+            
+        );
+           }   */
+    
+  } 
+
+
 
   return (
     <main className="layout">
@@ -75,9 +99,10 @@ export default function Application(props) {
               <DayList
                 days={state.days}
                 day={state.day}
-                setDay={(e) => {
-                  setState({ ...state, day: e });
-                }}
+                setDay={setDay}
+
+
+
               />
             </nav>
             <img
@@ -89,7 +114,7 @@ export default function Application(props) {
         }
       </section>
 
-      <section className="">
+      <section className="schedule">
         {appointments}
         {/* Replace this with the schedule elements durint the "The Scheduler" activity. */}
       </section>
