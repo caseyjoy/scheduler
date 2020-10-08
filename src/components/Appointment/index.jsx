@@ -12,6 +12,7 @@ const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
 const SAVING = "SAVING";
+const DELETING = "DELETING";
 
 const REPLACE = true;
 
@@ -44,18 +45,32 @@ export default function Appointment(props) {
     }
   }
 
+  function cancel (){
+    back();
+  }
+
+  function deleteInterview(){
+    back();
+    props.cancelInterview(props.id, transition(DELETING));
+  }
+
   let element;
   if (mode === CREATE) {
     element = (
-      <Form interviewers={props.interviewers} onSave={save} onCancel={back} />
+      <Form interviewers={props.interviewers} onSave={save} onCancel={cancel} />
     );
   } else if (mode === SAVING) {
     element = <Status message="Saving interview..." />;
-  } else if (mode === SHOW) {
+  } 
+  else if (mode === DELETING) {
+    element = <Status message="Deleting interview..." />;
+  } 
+  else if (mode === SHOW) {
     //props.interview.student
     // TODO: Add check for no results
     element = (
-      <Show student={props.interview ? props.interview.student : ""}
+      <Show onDelete={deleteInterview}
+      student={props.interview ? props.interview.student : ""}
             interviewer={props.interview ? props.interviewers.filter(i=>i.id===props.interview.interviewer)[0] : null } />
     );
 } 
