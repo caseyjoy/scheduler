@@ -23,8 +23,12 @@ export default function Application(props) {
     setState({ ...state, day: day });
   }
 
-  function bookInterview(id, interview) {
-    console.log(id, interview);
+  function cancelInterview(id){
+
+  }
+
+  function bookInterview(id, interview, show) {
+    //console.log("bookInterview", id, interview);
 
     const appointment = {
       ...state.appointments[id],
@@ -36,10 +40,14 @@ export default function Application(props) {
       [id]: appointment,
     };
 
+
+//console.log("axios put")
     axios
-      .put("http://localhost:8001/api/days", appointment)
+      .put(`http://localhost:8001/api/appointments/${id}`, appointment)
       .then(function (response) {
+        //console.log("PUT RESPONSE", response)
         setState({ ...state, appointments: appointments });
+        show();
       });
   }
 
@@ -72,16 +80,16 @@ export default function Application(props) {
     const selectedDayInterviewers = getInterviewersForDay(state, state.day);
 
     for (const appointment of selectedDayAppointments) {
-      console.log("appointment", appointment);
+      //console.log("appointment", appointment);
+
+      console.log("LOOP APPOINTMENT", appointment)
 
       appointments.push(
         <Appointment
           key={"appointment_" + appointment.id + "_" + appointment.time}
-          id={appointment.id}
-          time={appointment.time}
-          interview={appointment.interview}
           interviewers={selectedDayInterviewers}
           bookInterview={bookInterview}
+          {...appointment}
         />
       );
     }
