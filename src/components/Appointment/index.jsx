@@ -8,6 +8,7 @@ import Empty from "components/Appointment/Empty.jsx";
 import Form from "components/Appointment/Form.jsx";
 import Status from "components/Appointment/Status.jsx";
 import Confirm from "components/Appointment/Confirm.jsx";
+import Error from "components/Appointment/Error.jsx";
 
 import { getInterviewerForId } from "helpers/selectors.js";
 
@@ -41,9 +42,16 @@ export default function Appointment(props) {
     };
     if (name && interviewer) {
       transition(SAVING, REPLACE);
-      props.bookInterview(props.id, interview, () => {
-        transition(SHOW); // after saving the data, we can then show it
-      });
+      props.bookInterview(
+        props.id,
+        interview,
+        () => {
+          transition(SHOW); // after saving the data, we can then show it
+        },
+        () => {
+          transition(ERROR_SAVE); // if it broke, we need to be able to error out
+        }
+      );
     }
   }
 
@@ -56,6 +64,9 @@ export default function Appointment(props) {
       },
       () => {
         transition(EMPTY, REPLACE);
+      },
+      (response) => {
+        transition(ERROR_DELETE); // if it broke, we need to be able to error out
       }
     );
   }
@@ -130,6 +141,16 @@ export default function Appointment(props) {
           />
         );
 
+      case ERROR_SAVE:
+        return (
+          <Error message="Error saving appointment." onClose={back} />
+        );
+
+      case ERROR_DELETE:
+        return (
+          <Error message="Error deleting appointment." onClose={back} />
+        );
+
       // otherwise, it's just empty
       default:
         return (
@@ -142,7 +163,7 @@ export default function Appointment(props) {
     }
   })();
 
-  console.log("what is element:",element, typeof(element))
+  console.log("what is element:", element, typeof (element))
 
   // show the time header, and the component element we picked above
   return (

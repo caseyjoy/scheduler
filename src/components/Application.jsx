@@ -22,7 +22,7 @@ export default function Application(props) {
   // add one last appointment, so things display correctly, and the time at the bottom appears
   selectedDayAppointments.push({ time: "5pm", interview: null });
 
-  // using a ternary operator so the const appointments works correctly
+  // using a ternary operator so the const appointments assignment works correctly
   const appointments = (!state.appointments) ?
     // if there's no appointments yet, show a loading message
     [(<Status key="empty" message="Loading appointments..." />)] :

@@ -16,7 +16,7 @@ export default function useApplicationData() {
   }
 
   // the function passed to appointments, to create a new appointment, send it to the server, and update the interface
-  function bookInterview(id, interview, show) {
+  function bookInterview(id, interview, show, swaperror) {
     // create an appointment, and then store it in a new copy of appointments so we can send it to the server
     const appointment = {
       ...state.appointments[id],
@@ -42,14 +42,18 @@ export default function useApplicationData() {
       setState({ ...state, appointments: appointments, days: days });
 
       show();
+    }).catch(function (error){
+/*    console.log(error.response.status);
+      console.log(error.response.headers);
+      console.log(error.response.data); */
+      swaperror();
+      return error;
+      //return Promise.reject(error);
     });
-    /* .catch(function (error){
-        return Promise.reject(error);
-      }); */
   }
 
   // similar to bookInterview, onyl we remove all the data and then send appointments back with an empty one
-  function cancelInterview(id, status, empty) {
+  function cancelInterview(id, status, empty, swaperror) {
     // create an empty appointment, and then store it in a new copy of appointments so we can send it to the server
     const appointment = {
       ...state.appointments[id],
@@ -72,15 +76,18 @@ export default function useApplicationData() {
         }
 
         return day;
-      });
+      })
 
       setState({ ...state, appointments: appointments, days: days });
 
       empty();
+    }).catch(function (error){
+/*    console.log(error.response.status);
+      console.log(error.response.headers);
+      console.log(error.response.data); */
+      swaperror();
+      return error;
     });
-    /*       .catch(function (error){
-       return Promise.reject(error);
-     }); */
   }
 
   // This is probably the wrong way to do this
