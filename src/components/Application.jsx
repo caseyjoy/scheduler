@@ -14,33 +14,29 @@ import useApplicationData from "hooks/useApplicationData.jsx";
 
 export default function Application(props) {
   // the main state is controlled by the custom hook useApplicationData, instead of directly
-  const { state, setDay, bookInterview,cancelInterview } = useApplicationData();
-  
-  let appointments = [];
-  if (!state.appointments) {
+  const { state, setDay, bookInterview, cancelInterview } = useApplicationData();
+
+
+  // use selectors to get lists of the appointments and interviewers for the current state.day
+  const selectedDayAppointments = getAppointmentsForDay(state, state.day);
+  const selectedDayInterviewers = getInterviewersForDay(state, state.day);
+  // add one last appointment, so things display correctly, and the time at the bottom appears
+  selectedDayAppointments.push({ time: "5pm", interview: null });
+
+  // using a ternary operator so the const appointments works correctly
+  const appointments = (!state.appointments) ?
     // if there's no appointments yet, show a loading message
-    appointments.push(<Status key="empty" message="Loading appointments..." />);
-  } else {
-    // use selectors to get lists of the appointments and interviewers for the current state.day
-    const selectedDayAppointments = getAppointmentsForDay(state, state.day);
-    const selectedDayInterviewers = getInterviewersForDay(state, state.day);
-
-    // add one last appointment, so things display correctly, and the time at the bottom appears
-    selectedDayAppointments.push({time: "5pm", interview: null});
-
+    [(<Status key="empty" message="Loading appointments..." />)] :
     // make a list of appointments for drawing in the return, in the schedule
-    for (const appointment of selectedDayAppointments) {
-      appointments.push(
-        <Appointment
-          key={"appointment_" + appointment.id + "_" + appointment.time}
-          interviewers={selectedDayInterviewers}
-          bookInterview={bookInterview}
-          cancelInterview={cancelInterview}
-          {...appointment}
-        />
-      );
-    }
-  }
+    selectedDayAppointments.map(appointment =>
+      (<Appointment
+        key={"appointment_" + appointment.id + "_" + appointment.time}
+        interviewers={selectedDayInterviewers}
+        bookInterview={bookInterview}
+        cancelInterview={cancelInterview}
+        {...appointment}
+      />)
+    );
 
   // the main page, the daylist generates the days to click on, in the sidebar, and the schedule is populated with appointments above
   return (
