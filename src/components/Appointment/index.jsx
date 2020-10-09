@@ -42,33 +42,33 @@ export default function Appointment(props) {
     };
     if (name && interviewer) {
       transition(SAVING, REPLACE);
-      props.bookInterview(
-        props.id,
-        interview,
-        () => {
-          transition(SHOW); // after saving the data, we can then show it
-        },
-        () => {
-          transition(ERROR_SAVE); // if it broke, we need to be able to error out
-        }
-      );
+      props
+        .bookInterview(props.id, interview)
+        .then(
+          // call these with then and catch instead of passing them directly, to avoid stale state
+          (response) => {
+            transition(SHOW);
+          } // after saving the data, we can then show it
+        )
+        .catch(
+          (error) => {
+            transition(ERROR_SAVE);
+          } // if it broke, we need to be able to error out
+        );
     }
   }
 
   // passed along for deleting data
   function onDelete() {
-    props.cancelInterview(
-      props.id,
-      () => {
-        transition(DELETING, REPLACE);
-      },
-      () => {
+    transition(DELETING, REPLACE);
+    props
+      .cancelInterview()
+      .then(() => {
         transition(EMPTY, REPLACE);
-      },
-      (response) => {
+      })
+      .catch((error) => {
         transition(ERROR_DELETE); // if it broke, we need to be able to error out
-      }
-    );
+      });
   }
 
   function onDeleteIconClick(name, interviewer) {
@@ -103,11 +103,15 @@ export default function Appointment(props) {
 
       case CREATE:
         return (
-          <Form interviewers={props.interviewers} onSave={save} onCancel={back} />
+          <Form
+            interviewers={props.interviewers}
+            onSave={save}
+            onCancel={back}
+          />
         );
 
       case SAVING:
-        return (<Status message="Saving interview..." />);
+        return <Status message="Saving interview..." />;
 
       case CONFIRM:
         return (
@@ -121,7 +125,7 @@ export default function Appointment(props) {
         );
 
       case DELETING:
-        return (<Status message="Deleting interview..." />);
+        return <Status message="Deleting interview..." />;
 
       case SHOW:
         return (
@@ -136,20 +140,15 @@ export default function Appointment(props) {
             interviewer={getInterviewerForId(
               props.interviewers,
               props.interview.interviewer
-            )
-            }
+            )}
           />
         );
 
       case ERROR_SAVE:
-        return (
-          <Error message="Error saving appointment." onClose={back} />
-        );
+        return <Error message="Error saving appointment." onClose={back} />;
 
       case ERROR_DELETE:
-        return (
-          <Error message="Error deleting appointment." onClose={back} />
-        );
+        return <Error message="Error deleting appointment." onClose={back} />;
 
       // otherwise, it's just empty
       default:
@@ -163,7 +162,7 @@ export default function Appointment(props) {
     }
   })();
 
-  console.log("what is element:", element, typeof (element))
+  console.log("what is element:", element, typeof element);
 
   // show the time header, and the component element we picked above
   return (
