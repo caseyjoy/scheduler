@@ -24,8 +24,6 @@ export default function Application(props) {
   }
 
   function cancelInterview(id, status, empty){
-    console.log("CANCEL interview",  id)
-    
      const appointment = {
       ...state.appointments[id],
       interview: { student: "", interviewer: null },
@@ -40,19 +38,15 @@ export default function Application(props) {
     status();
 
       axios
-      .put(`http://localhost:8001/api/appointments/${id}`, appointment)
+      .put(`/api/appointments/${id}`, appointment)
       .then(function (response) {
-        //console.log("PUT RESPONSE", response)
         setState({ ...state, appointments: appointments });
         empty();
       });
 
-    console.log("cancel,", id)
   }
 
   function bookInterview(id, interview, show) {
-    //console.log("bookInterview", id, interview);
-
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview },
@@ -62,29 +56,25 @@ export default function Application(props) {
       ...state.appointments,
       [id]: appointment,
     };
-
-    console.log("#1", `http://localhost:8001/api/appointments/${id}`)
     
     axios
-      .put(`http://localhost:8001/api/appointments/${id}`, appointment)
+      .put(`/api/appointments/${id}`, appointment)
       .then(function (response) {
-        //console.log("PUT RESPONSE", response)
         setState({ ...state, appointments: appointments });
         show();
       });
   }
 
   useEffect(() => {
-    const first = axios.get("http://localhost:8001/api/days");
-    const second = axios.get("http://localhost:8001/api/appointments");
-    const third = axios.get("http://localhost:8001/api/interviewers");
+    const first = axios.get("/api/days");
+    const second = axios.get("/api/appointments");
+    const third = axios.get("/api/interviewers");
 
     Promise.all([
       Promise.resolve(first),
       Promise.resolve(second),
       Promise.resolve(third),
     ]).then((all) => {
-      //console.log("All:", all);
       const [first, second, third] = all;
       setState({
         ...state,
@@ -103,10 +93,6 @@ export default function Application(props) {
     const selectedDayInterviewers = getInterviewersForDay(state, state.day);
 
     for (const appointment of selectedDayAppointments) {
-      //console.log("appointment", appointment);
-
-      // console.log("LOOP APPOINTMENT", appointment)
-
       appointments.push(
         <Appointment
           key={"appointment_" + appointment.id + "_" + appointment.time}
@@ -144,7 +130,6 @@ export default function Application(props) {
 
       <section className="schedule">
         {appointments}
-        {/* Replace this with the schedule elements durint the "The Scheduler" activity. */}
       </section>
     </main>
   );

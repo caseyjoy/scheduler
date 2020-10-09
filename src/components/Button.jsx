@@ -5,9 +5,6 @@ import "components/Button.scss";
 //import { action } from "@storybook/addon-actions";
 
 export default function Button(props) {
-  
-  //console.log("OUTPUT:", a,func);
-
   const buttonClass = classnames(
     "button",
     { "button--confirm": props.confirm },

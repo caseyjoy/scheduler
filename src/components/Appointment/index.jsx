@@ -28,7 +28,6 @@ export default function Appointment(props) {
       student: name,
       interviewer: interviewer,
     };
-    //console.log("SAVE", name, interviewer);
     if (name && interviewer) {
       /* setStudent(name);
       setInterviewer(interviewer); */
@@ -40,7 +39,6 @@ export default function Appointment(props) {
   }
 
   function onDelete() {
-    console.log("delete is go");
     props.cancelInterview(
       props.id,
       () => {
@@ -89,7 +87,6 @@ export default function Appointment(props) {
     element = (
       <Show
         onDeleteIconClick={() => {
-          console.log("delete icon");
           onDeleteIconClick();
         }}
         student={props.interview ? props.interview.student : ""}
