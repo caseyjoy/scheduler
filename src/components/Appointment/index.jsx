@@ -65,7 +65,7 @@ export default function Appointment(props) {
         transition(EMPTY, REPLACE);
       })
       .catch((error) => {
-        transition(ERROR_DELETE); // if it broke, we need to be able to error out
+        transition(ERROR_DELETE, REPLACE); // if it broke, we need to be able to error out
       });
   }
 
@@ -129,7 +129,7 @@ export default function Appointment(props) {
         return (
           <Show
             onEditClick={() => {
-              transition(EDIT, REPLACE);
+              transition(EDIT);
             }}
             onDeleteIconClick={() => {
               onDeleteIconClick();
