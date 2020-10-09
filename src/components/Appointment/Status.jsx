@@ -1,5 +1,7 @@
 import React from "react";
 
+// The component shown in Appointment when waiting for something
+// This also gets shown when loading all the appointment data for the first time
 export default function Status(props) {
   return (
     <main className="appointment__card appointment__card--status">

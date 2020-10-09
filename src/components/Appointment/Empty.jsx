@@ -1,5 +1,6 @@
 import React from "react";
 
+// The component shown in Appointment when there's no interview data to display
 export default function Empty(props) {
   return (
     <main className="appointment__add">

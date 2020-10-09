@@ -1,7 +1,6 @@
 import React from "react";
 
-//import { action } from "@storybook/addon-actions";
-
+// The component shown in Appointment when something has gone wrong
 export default function Error(props) {
   return (
     <main className="appointment__card appointment__card--error">

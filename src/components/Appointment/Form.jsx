@@ -3,27 +3,31 @@ import React, { useState } from "react";
 import Button from "components/Button.jsx";
 import InterviewerList from "components/InterviewerList.jsx";
 
-
-
+// shown when editing an appointment, or making a new one
 export default function Form (props) {
   const [name, setName] = useState(props.name || "");
   const [selectedInterviewer, setInterviewer]  = useState(props.interviewer || null);
 
+  // when click the cancel button, clear out the name and the interviewer
+  // TODO: Find out if this is still needed
   function reset (){
     setName("");
     setInterviewer(null);
   }
 
+  // used when clicking the cancel button, calls onCancel to leave the mode
   function cancel (){
     reset();
     props.onCancel();
   }
 
+  // when typing in the student name field, it calls this
   function update(event){
     event.preventDefault();
     setName(event.target.value);
   }
 
+  // when clicking the save button, call the onSave function to change the mode and save the data
   function save(event){
     props.onSave(name, selectedInterviewer);
   }
