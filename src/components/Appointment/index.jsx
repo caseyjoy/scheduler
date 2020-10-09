@@ -75,6 +75,8 @@ export default function Appointment(props) {
 
   // the component that gets drawn after the header
   // depending on what mode is set, set the right coponent to element to be displayed
+  // had to wrap switch in a function to get it to return right
+  // TODO: Find out if there's a way to return things here without wrapping switch in in a function
   const element = (function () {
     switch (mode) {
       case EDIT:

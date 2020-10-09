@@ -1,9 +1,10 @@
 import React from "react";
-// import classnames from "classnames";
 
 import InterviewerListItem from "./InterviewerListItem.jsx";
 import "components/InterviewerList.scss";
 
+// Shows a list of interviewers, and allows you to select one
+// Used in the Form component of Appointment
 export default function InterviewerList(props) {
   const formattedInterviewers = props.interviewers.map(interviewer => 
     <InterviewerListItem

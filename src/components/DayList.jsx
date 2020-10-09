@@ -2,6 +2,7 @@ import React from "react";
 
 import DayListItem from "components/DayListItem.jsx";
 
+// Used for showing the list of days in the sidebar. Generates an array of DaylistItem to display
 export default function DayList(props) {
   const listOfDays = (props.days !== []) ?
     props.days.map((day) => (

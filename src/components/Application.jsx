@@ -16,7 +16,6 @@ export default function Application(props) {
   // the main state is controlled by the custom hook useApplicationData, instead of directly
   const { state, setDay, bookInterview, cancelInterview } = useApplicationData();
 
-
   // use selectors to get lists of the appointments and interviewers for the current state.day
   const selectedDayAppointments = getAppointmentsForDay(state, state.day);
   const selectedDayInterviewers = getInterviewersForDay(state, state.day);

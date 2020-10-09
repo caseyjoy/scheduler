@@ -18,6 +18,7 @@ function formatSpots(spots) {
   }
 }
 
+// Displays a day, only used in DayList
 export default function DayListItem(props) {
   const spots = Number(props.spots)
   const formattedSpots = formatSpots(spots);
