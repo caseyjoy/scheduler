@@ -1,3 +1,5 @@
+// Why is monday showing the wrong spot count?
+
 import React from "react";
 
 import "components/Application.scss";
@@ -23,7 +25,6 @@ export default function Application(props) {
     selectedDayAppointments.push({time: "5pm", interview: null});
 
     for (const appointment of selectedDayAppointments) {
-      console.log(appointment.id, appointment)
       appointments.push(
         <Appointment
           key={"appointment_" + appointment.id + "_" + appointment.time}

@@ -35,4 +35,4 @@ function getInterviewersForDay(state, newDay){
 
 
 
-export { getAppointmentsForDay, getInterviewersForDay };
+export { getAppointmentsForDay, getInterviewersForDay, getDayWithName };
