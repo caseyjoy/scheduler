@@ -1,26 +1,24 @@
-function getInterviewerForId(interviewers, id){
-  if(interviewers){
-    return interviewers.filter((i) => i.id === id)[0];
-  }
-  else{
+function getInterviewerForId(interviewers, id) {
+  // find the first interviewer in the list of interviewers that has id
+  const search = interviewers.filter((i) => i.id === id);
+
+  if (search.length > 0) {
+    // if we found one, return it
+    return search[0];
+  } else {
+    // returns null if it can't find them, because the components expect that for an empty interviewer
     return null;
   }
 }
 
-/* props.interviewers.filter(
-  
-)[0] */
-
-
-// Takes a list of days, and returns the one with the right name
-function getDayWithName(days, day){
-  const search = days.filter(checkday => checkday.name === day);
-  if (search.length > 0){
-    return search[0]
+function getDayWithName(days, day) {
+  // Takes a list of days, and returns the one with the right name
+  const search = days.filter((checkday) => checkday.name === day);
+  if (search.length > 0) {
+    return search[0];
+  } else {
+    return false;
   }
-    else {
-      return false;
-    }
 }
 
 function getAppointmentsForDay(state, newDay) {
@@ -32,14 +30,13 @@ function getAppointmentsForDay(state, newDay) {
       if (a !== []) result.push(state.appointments[a]);
       return result;
     }, []);
-    
   } else {
     // if the search for the day failed, just return an empty list
     return [];
   }
 }
 
-function getInterviewersForDay(state, newDay){
+function getInterviewersForDay(state, newDay) {
   const search = getDayWithName(state.days, newDay);
 
   if (search) {
@@ -48,11 +45,15 @@ function getInterviewersForDay(state, newDay){
       if (a !== []) result.push(state.interviewers[a]);
       return result;
     }, []);
-    
   } else {
-     // if the search for the day failed, just return an empty list
+    // if the search for the day failed, just return an empty list
     return [];
   }
 }
 
-export { getInterviewerForId, getAppointmentsForDay, getInterviewersForDay, getDayWithName };
+export {
+  getInterviewerForId,
+  getAppointmentsForDay,
+  getInterviewersForDay,
+  getDayWithName,
+};
