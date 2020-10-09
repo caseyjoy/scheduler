@@ -73,77 +73,74 @@ export default function Appointment(props) {
     transition(EMPTY, REPLACE);
   }
 
-  let element; // the component that gets drawn after the header
-
+  // the component that gets drawn after the header
   // depending on what mode is set, set the right coponent to element to be displayed
-  switch (mode) {
-    case EDIT:
-      element = (
-        <Form
-          name={props.interview.student}
-          interviewer={props.interview.interviewer}
-          interviewers={props.interviewers}
-          onSave={save}
-          onCancel={back}
-        />
-      );
-      break;
+  const element = (function () {
+    switch (mode) {
+      case EDIT:
+        return (
+          <Form
+            name={props.interview.student}
+            interviewer={props.interview.interviewer}
+            interviewers={props.interviewers}
+            onSave={save}
+            onCancel={back}
+          />
+        );
 
-    case CREATE:
-      element = (
-        <Form interviewers={props.interviewers} onSave={save} onCancel={back} />
-      );
-      break;
+      case CREATE:
+        return (
+          <Form interviewers={props.interviewers} onSave={save} onCancel={back} />
+        );
 
-    case SAVING:
-      element = <Status message="Saving interview..." />;
-      break;
+      case SAVING:
+        return (<Status message="Saving interview..." />);
 
-    case CONFIRM:
-      element = (
-        <Confirm
-          onConfirm={() => {
-            onDelete();
-          }}
-          onCancel={back}
-          message="Really delete?"
-        />
-      );
-      break;
+      case CONFIRM:
+        return (
+          <Confirm
+            onConfirm={() => {
+              onDelete();
+            }}
+            onCancel={back}
+            message="Really delete?"
+          />
+        );
 
-    case DELETING:
-      element = <Status message="Deleting interview..." />;
-      break;
+      case DELETING:
+        return (<Status message="Deleting interview..." />);
 
-    case SHOW:
-      element = (
-        <Show
-          onEditClick={() => {
-            transition(EDIT, REPLACE);
-          }}
-          onDeleteIconClick={() => {
-            onDeleteIconClick();
-          }}
-          student={props.interview ? props.interview.student : ""}
-          interviewer={getInterviewerForId(
-            props.interviewers,
-            props.interview.interviewer
-          )}
-        />
-      );
-      break;
+      case SHOW:
+        return (
+          <Show
+            onEditClick={() => {
+              transition(EDIT, REPLACE);
+            }}
+            onDeleteIconClick={() => {
+              onDeleteIconClick();
+            }}
+            student={props.interview ? props.interview.student : ""}
+            interviewer={getInterviewerForId(
+              props.interviewers,
+              props.interview.interviewer
+            )
+            }
+          />
+        );
 
-    // otherwise, it's just empty
-    default:
-      element = (
-        <Empty
-          onAdd={() => {
-            transition(CREATE);
-          }}
-        />
-      );
-      break;
-  }
+      // otherwise, it's just empty
+      default:
+        return (
+          <Empty
+            onAdd={() => {
+              transition(CREATE);
+            }}
+          />
+        );
+    }
+  })();
+
+  console.log("what is element:",element, typeof(element))
 
   // show the time header, and the component element we picked above
   return (
