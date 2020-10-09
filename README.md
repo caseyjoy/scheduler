@@ -26,4 +26,4 @@ npm test
 npm run storybook
 ```
 ## Data server
-You will also need (https://github.com/lighthouse-labs/scheduler-api) if you want the data to show up.
+You will also need (https://github.com/caseyjoy/scheduler-api) if you want the data to show up.
