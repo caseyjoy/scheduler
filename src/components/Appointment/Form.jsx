@@ -8,19 +8,6 @@ export default function Form (props) {
   const [name, setName] = useState(props.name || "");
   const [selectedInterviewer, setInterviewer]  = useState(props.interviewer || null);
 
-  // when click the cancel button, clear out the name and the interviewer
-  // TODO: Find out if this is still needed
-  function reset (){
-    setName("");
-    setInterviewer(null);
-  }
-
-  // used when clicking the cancel button, calls onCancel to leave the mode
-  function cancel (){
-    reset();
-    props.onCancel();
-  }
-
   // when typing in the student name field, it calls this
   function update(event){
     event.preventDefault();
@@ -32,7 +19,6 @@ export default function Form (props) {
     props.onSave(name, selectedInterviewer);
   }
   
-
   return (
     <main className="appointment__card appointment__card--create">
       <section className="appointment__card-left">
@@ -56,7 +42,7 @@ export default function Form (props) {
 
       <section className="appointment__card-right">
         <section className="appointment__actions">
-          <Button danger onClick={cancel}>
+          <Button danger onClick={props.onCancel}>
             Cancel
           </Button>
 
