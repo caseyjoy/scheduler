@@ -20,7 +20,10 @@ export default function Application(props) {
     const selectedDayAppointments = getAppointmentsForDay(state, state.day);
     const selectedDayInterviewers = getInterviewersForDay(state, state.day);
 
+    selectedDayAppointments.push({time: "5pm", interview: null});
+
     for (const appointment of selectedDayAppointments) {
+      console.log(appointment.id, appointment)
       appointments.push(
         <Appointment
           key={"appointment_" + appointment.id + "_" + appointment.time}

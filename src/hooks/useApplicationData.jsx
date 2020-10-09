@@ -23,16 +23,25 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment,
     };
-    
+
+    const days = {
+      ...state.days
+    }
+
+    // send the changed appointment data to the server
     axios
       .put(`/api/appointments/${id}`, appointment)
       .then(function (response) {
         setState({ ...state, appointments: appointments });
         show();
       });
-/*       .catch(function (error){
+      /* .catch(function (error){
         return Promise.reject(error);
       }); */
+
+      // change the day data to the server
+      /* setState({ ...state, days: days }); */
+
   }
 
   function cancelInterview(id, status, empty){
