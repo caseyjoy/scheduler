@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from "react";
-
-import axios from "axios";
+import React from "react";
 
 import "components/Application.scss";
 import DayList from "./DayList.jsx";
@@ -10,81 +8,11 @@ import {
   getAppointmentsForDay,
   getInterviewersForDay,
 } from "helpers/selectors.js";
+import useApplicationData from "hooks/useApplicationData.jsx";
 
 export default function Application(props) {
-  const [state, setState] = useState({
-    day: "Monday",
-    days: [],
-    appointments: null,
-    interviewers: null,
-  });
-
-  function setDay(day) {
-    setState({ ...state, day: day });
-  }
-
-  function cancelInterview(id, status, empty){
-     const appointment = {
-      ...state.appointments[id],
-      interview: { student: "", interviewer: null },
-    }; 
-    
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
-
-    setState({ ...state, appointments: appointments });
-    status();
-
-      axios
-      .put(`/api/appointments/${id}`, appointment)
-      .then(function (response) {
-        setState({ ...state, appointments: appointments });
-        empty();
-      });
-
-  }
-
-  function bookInterview(id, interview, show) {
-    const appointment = {
-      ...state.appointments[id],
-      interview: { ...interview },
-    };
-
-    const appointments = {
-      ...state.appointments,
-      [id]: appointment,
-    };
-    
-    axios
-      .put(`/api/appointments/${id}`, appointment)
-      .then(function (response) {
-        setState({ ...state, appointments: appointments });
-        show();
-      });
-  }
-
-  useEffect(() => {
-    const first = axios.get("/api/days");
-    const second = axios.get("/api/appointments");
-    const third = axios.get("/api/interviewers");
-
-    Promise.all([
-      Promise.resolve(first),
-      Promise.resolve(second),
-      Promise.resolve(third),
-    ]).then((all) => {
-      const [first, second, third] = all;
-      setState({
-        ...state,
-        days: first.data,
-        appointments: second.data,
-        interviewers: third.data,
-      });
-    });
-  }, []);
-
+  const { state, setDay, bookInterview,cancelInterview } = useApplicationData();
+  
   let appointments = [];
   if (!state.appointments) {
     appointments.push(<Status key="empty" message="Loading appointments..." />);

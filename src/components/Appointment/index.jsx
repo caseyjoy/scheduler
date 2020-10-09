@@ -9,6 +9,7 @@ import Form from "components/Appointment/Form.jsx";
 import Status from "components/Appointment/Status.jsx";
 import Confirm from "components/Appointment/Confirm.jsx";
 
+// modes for transitioning between with useVisualMode
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
@@ -16,6 +17,8 @@ const EDIT = "EDIT";
 const SAVING = "SAVING";
 const DELETING = "DELETING";
 const CONFIRM = "CONFIRM";
+const ERROR_SAVE = "ERROR_SAVE";
+const ERROR_DELETE = " ERROR_DELETE";
 
 const REPLACE = true;
 
