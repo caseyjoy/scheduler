@@ -7,12 +7,14 @@ import Show from "components/Appointment/Show.jsx";
 import Empty from "components/Appointment/Empty.jsx";
 import Form from "components/Appointment/Form.jsx";
 import Status from "components/Appointment/Status.jsx";
+import Confirm from "components/Appointment/Confirm.jsx";
 
 const EMPTY = "EMPTY";
 const SHOW = "SHOW";
 const CREATE = "CREATE";
 const SAVING = "SAVING";
 const DELETING = "DELETING";
+const CONFIRM = "CONFIRM";
 
 const REPLACE = true;
 
@@ -20,14 +22,6 @@ export default function Appointment(props) {
   const { mode, transition, back } = useVisualMode(
     props.interview ? SHOW : EMPTY
   );
-  /* const [student, setStudent] = useState(
-    props.interview ? props.interview.student : ""
-  );
-  const [interviewer, setInterviewer] = useState(
-    props.interview ? props.interviewers[props.interview.interviewer] : null
-  ); */
-
-  //console.log(props.interview);
 
   function save(name, interviewer) {
     const interview = {
@@ -45,40 +39,59 @@ export default function Appointment(props) {
     }
   }
 
-  function cancel() {
-    back();
+  function onDelete() {
+    console.log("delete is go");
+    props.cancelInterview(
+      props.id,
+      () => {
+        transition(DELETING, REPLACE);
+      },
+      () => {
+        transition(EMPTY, REPLACE);
+      }
+    );
   }
 
-  function onDelete(name, interviewer) {
-    console.log("delete 1");
-    console.log("DeleteInterview", name, interviewer);
-    if (name && interviewer) {
-      console.log("delete is go");
-      props.cancelInterview(props.id, () => {transition(DELETING, REPLACE);}, () => {transition(EMPTY, REPLACE);});
-    }
+  function onDeleteIconClick(name, interviewer) {
+    transition(CONFIRM);
   }
 
-  if(mode === SHOW && (props.interview.student === "" || props.interview.interviewer === null)){
+  if (
+    mode === SHOW &&
+    (props.interview.student === "" || props.interview.interviewer === null)
+  ) {
     transition(EMPTY, REPLACE);
   }
- 
+
   let element;
   if (mode === CREATE) {
     element = (
-      <Form interviewers={props.interviewers} onSave={save} onCancel={cancel} />
+      <Form interviewers={props.interviewers} onSave={save} onCancel={back} />
     );
   } else if (mode === SAVING) {
     element = <Status message="Saving interview..." />;
+  } else if (mode === CONFIRM) {
+    element = (
+      <Confirm
+        onConfirm={() => {
+          onDelete();
+        }}
+        onCancel={back}
+        message="Really delete?"
+      />
+    );
   } else if (mode === DELETING) {
     element = <Status message="Deleting interview..." />;
-/*     if (props.interview.student == "" || props.interview.interviewer == null)
+    /*     if (props.interview.student == "" || props.interview.interviewer == null)
     transition(SHOW, REPLACE) */
   } else if (mode === SHOW) {
-
     // TODO: Add check for no results
     element = (
       <Show
-        onDelete={onDelete}
+        onDeleteIconClick={() => {
+          console.log("delete icon");
+          onDeleteIconClick();
+        }}
         student={props.interview ? props.interview.student : ""}
         interviewer={
           props.interview
@@ -108,4 +121,3 @@ export default function Appointment(props) {
     </article>
   );
 }
-// : {editing ? <Create interviewers={props.interviewers} /> : ""}
