@@ -45,16 +45,14 @@ export default function Appointment(props) {
       props
         .bookInterview(props.id, interview)
         .then(
-          // call these with then and catch instead of passing them directly, to avoid stale state
+          // calling these with then and catch instead of passing them directly, to avoid stale state
           (response) => {
-            transition(SHOW);
-          } // after saving the data, we can then show it
+            transition(SHOW); // after saving the data, we can then show it
+          }
         )
-        .catch(
-          (error) => {
-            transition(ERROR_SAVE);
-          } // if it broke, we need to be able to error out
-        );
+        .catch((error) => {
+          transition(ERROR_SAVE); // if it broke, it needs to error out
+        });
     }
   }
 
@@ -62,8 +60,8 @@ export default function Appointment(props) {
   function onDelete() {
     transition(DELETING, REPLACE);
     props
-      .cancelInterview()
-      .then(() => {
+      .cancelInterview(props.id)
+      .then((response) => {
         transition(EMPTY, REPLACE);
       })
       .catch((error) => {

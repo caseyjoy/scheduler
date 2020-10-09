@@ -17,7 +17,7 @@ export default function useApplicationData() {
 
   // the function passed to appointments, to create a new appointment, send it to the server, and update the interface
   function bookInterview(id, interview) {
-    // create an appointment, and then store it in a new copy of appointments so we can send it to the server
+    // create an appointment, and then store it in a new copy of appointments so we can send it to the server and update the client
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview },
@@ -28,7 +28,7 @@ export default function useApplicationData() {
     };
 
     // send the changed appointments data object to the server
-    axios.put(`/api/appointments/${id}`, appointment).then(function (response) {
+    return axios.put(`/api/appointments/${id}`, appointment).then((response) => {
       // TODO: should only do this if it works
       // decrement the spots for the day since one is added, client side
       const days = [...state.days].map((day) => {
@@ -40,46 +40,38 @@ export default function useApplicationData() {
       });
 
       setState({ ...state, appointments: appointments, days: days });
-    }).catch(function (error){
-/*    console.log(error.response.status);
-      console.log(error.response.headers);
-      console.log(error.response.data); */
-      return error;
-      //return Promise.reject(error);
+      //return Promise.resolve(response);
+    }).catch((error) => {
+      return Promise.reject(error)
     });
   }
 
   // similar to bookInterview, onyl we remove all the data and then send appointments back with an empty one
   function cancelInterview(id) {
-    // create an empty appointment, and then store it in a new copy of appointments so we can send it to the server
+  /*   console.log(state.appointments) */
+
+    // create an empty appointment, and then store it in a new copy of appointments so we can use it to update the client
     const appointment = {
       ...state.appointments[id],
-      interview: { student: "", interviewer: null },
-    };
+      interview: null
+    }; 
 
     const appointments = {
       ...state.appointments,
       [id]: appointment,
     };
 
-    axios.put(`/api/appointments/${id}`, appointment).then(function (response) {
-      // TODO: should only do this if it works
+    return axios.delete(`/api/appointments/${id}`)
+    .then((response) => {
       // increment the spots for the day since one is removed, client side
-      const days = [...state.days].map((day) => {
-        if (state.day === day.name) {
-          return { ...day, spots: day.spots + 1 };
-        }
-
-        return day;
-      })
-
+      const days = [...state.days].map(day => state.day === day.name ? { ...day, spots: day.spots + 1 } : day);
       setState({ ...state, appointments: appointments, days: days });
-    }).catch(function (error){
-      return error;
+    }).catch((error) => {
+      return Promise.reject(error)
     });
   }
 
-  // This is probably the wrong way to do this
+  // TODO: Fix this to use error handling
   useEffect(() => {
     const first = axios.get("/api/days");
     const second = axios.get("/api/appointments");
