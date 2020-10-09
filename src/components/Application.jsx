@@ -13,17 +13,22 @@ import {
 import useApplicationData from "hooks/useApplicationData.jsx";
 
 export default function Application(props) {
+  // the main state is controlled by the custom hook useApplicationData, instead of directly
   const { state, setDay, bookInterview,cancelInterview } = useApplicationData();
   
   let appointments = [];
   if (!state.appointments) {
+    // if there's no appointments yet, show a loading message
     appointments.push(<Status key="empty" message="Loading appointments..." />);
   } else {
+    // use selectors to get lists of the appointments and interviewers for the current state.day
     const selectedDayAppointments = getAppointmentsForDay(state, state.day);
     const selectedDayInterviewers = getInterviewersForDay(state, state.day);
 
+    // add one last appointment, so things display correctly, and the time at the bottom appears
     selectedDayAppointments.push({time: "5pm", interview: null});
 
+    // make a list of appointments for drawing in the return, in the schedule
     for (const appointment of selectedDayAppointments) {
       appointments.push(
         <Appointment
@@ -37,6 +42,7 @@ export default function Application(props) {
     }
   }
 
+  // the main page, the daylist generates the days to click on, in the sidebar, and the schedule is populated with appointments above
   return (
     <main className="layout">
       <section className="sidebar">
