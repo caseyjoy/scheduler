@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import useVisualMode from "hooks/useVisualMode";
 
 import "components/Appointment/styles.scss";
@@ -45,15 +45,23 @@ export default function Appointment(props) {
     }
   }
 
-  function cancel (){
+  function cancel() {
     back();
   }
 
-  function deleteInterview(){
-    back();
-    props.cancelInterview(props.id, transition(DELETING));
+  function onDelete(name, interviewer) {
+    console.log("delete 1");
+    console.log("DeleteInterview", name, interviewer);
+    if (name && interviewer) {
+      console.log("delete is go");
+      props.cancelInterview(props.id, () => {transition(DELETING, REPLACE);}, () => {transition(EMPTY, REPLACE);});
+    }
   }
 
+  if(mode === SHOW && (props.interview.student === "" || props.interview.interviewer === null)){
+    transition(EMPTY, REPLACE);
+  }
+ 
   let element;
   if (mode === CREATE) {
     element = (
@@ -61,35 +69,43 @@ export default function Appointment(props) {
     );
   } else if (mode === SAVING) {
     element = <Status message="Saving interview..." />;
-  } 
-  else if (mode === DELETING) {
+  } else if (mode === DELETING) {
     element = <Status message="Deleting interview..." />;
-  } 
-  else if (mode === SHOW) {
-    //props.interview.student
+/*     if (props.interview.student == "" || props.interview.interviewer == null)
+    transition(SHOW, REPLACE) */
+  } else if (mode === SHOW) {
+
     // TODO: Add check for no results
     element = (
-      <Show onDelete={deleteInterview}
-      student={props.interview ? props.interview.student : ""}
-            interviewer={props.interview ? props.interviewers.filter(i=>i.id===props.interview.interviewer)[0] : null } />
+      <Show
+        onDelete={onDelete}
+        student={props.interview ? props.interview.student : ""}
+        interviewer={
+          props.interview
+            ? props.interviewers.filter(
+                (i) => i.id === props.interview.interviewer
+              )[0]
+            : null
+        }
+      />
     );
-} 
-// interviewer={props.interview ? props.interviewers.filter(i => i === props.interview.interviewer.id) : null } />
-else {
-  element = (
-    <Empty
-      onAdd={() => {
-        transition(CREATE);
-      }}
-    />
-  );
-}
+  }
+  // interviewer={props.interview ? props.interviewers.filter(i => i === props.interview.interviewer.id) : null } />
+  else {
+    element = (
+      <Empty
+        onAdd={() => {
+          transition(CREATE);
+        }}
+      />
+    );
+  }
 
-return (
-  <article className="appointment">
-    <Header time={props.time} />
-    {element}
-  </article>
-);
+  return (
+    <article className="appointment">
+      <Header time={props.time} />
+      {element}
+    </article>
+  );
 }
 // : {editing ? <Create interviewers={props.interviewers} /> : ""}

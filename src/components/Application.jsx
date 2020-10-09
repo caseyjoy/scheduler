@@ -23,11 +23,13 @@ export default function Application(props) {
     setState({ ...state, day: day });
   }
 
-  function cancelInterview(id, status){
-    const appointment = {
+  function cancelInterview(id, status, empty){
+    console.log("CANCEL interview",  id)
+    
+     const appointment = {
       ...state.appointments[id],
-      interview: null,
-    };
+      interview: { student: "", interviewer: null },
+    }; 
     
     const appointments = {
       ...state.appointments,
@@ -35,12 +37,14 @@ export default function Application(props) {
     };
 
     setState({ ...state, appointments: appointments });
+    status();
 
-    axios
-    .put(`http://localhost:8001/api/appointments/${id}`, appointment)
-      
+      axios
+      .put(`http://localhost:8001/api/appointments/${id}`, appointment)
       .then(function (response) {
+        //console.log("PUT RESPONSE", response)
         setState({ ...state, appointments: appointments });
+        empty();
       });
 
     console.log("cancel,", id)
@@ -59,8 +63,8 @@ export default function Application(props) {
       [id]: appointment,
     };
 
-
-//console.log("axios put")
+    console.log("#1", `http://localhost:8001/api/appointments/${id}`)
+    
     axios
       .put(`http://localhost:8001/api/appointments/${id}`, appointment)
       .then(function (response) {
@@ -101,7 +105,7 @@ export default function Application(props) {
     for (const appointment of selectedDayAppointments) {
       //console.log("appointment", appointment);
 
-      console.log("LOOP APPOINTMENT", appointment)
+      // console.log("LOOP APPOINTMENT", appointment)
 
       appointments.push(
         <Appointment
