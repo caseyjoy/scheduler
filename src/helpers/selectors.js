@@ -1,3 +1,17 @@
+function getInterviewerForId(interviewers, id){
+  if(interviewers){
+    return interviewers.filter((i) => i.id === id)[0];
+  }
+  else{
+    return null;
+  }
+}
+
+/* props.interviewers.filter(
+  
+)[0] */
+
+
 // Takes a list of days, and returns the one with the right name
 function getDayWithName(days, day){
   const search = days.filter(checkday => checkday.name === day);
@@ -41,4 +55,4 @@ function getInterviewersForDay(state, newDay){
   }
 }
 
-export { getAppointmentsForDay, getInterviewersForDay, getDayWithName };
+export { getInterviewerForId, getAppointmentsForDay, getInterviewersForDay, getDayWithName };
