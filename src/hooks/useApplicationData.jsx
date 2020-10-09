@@ -24,9 +24,14 @@ export default function useApplicationData() {
       [id]: appointment,
     };
 
+ /*    console.log("days, day", state.days, state.day)
+    const day = { ...state.days[state.day], spots:state.days[state.day].spots - 1 };
+
     const days = {
-      ...state.days
-    }
+      ...state.days,
+      day
+    } */
+    /* setState({ ...state, days: days }); */
 
     // send the changed appointment data to the server
     axios
@@ -38,9 +43,7 @@ export default function useApplicationData() {
       /* .catch(function (error){
         return Promise.reject(error);
       }); */
-
-      // change the day data to the server
-      /* setState({ ...state, days: days }); */
+      
 
   }
 

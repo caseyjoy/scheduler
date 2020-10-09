@@ -1,5 +1,9 @@
+function getDayWithName(days, day){
+  return days.filter(checkday => checkday.name === day);
+}
+
 function getAppointmentsForDay(state, newDay) {
-  const search = state.days.filter((day) => day.name === newDay);
+  const search = getDayWithName(state.days, newDay);
 
   if (search.length > 0) {
     const appList = search[0].appointments;
@@ -14,7 +18,7 @@ function getAppointmentsForDay(state, newDay) {
 }
 
 function getInterviewersForDay(state, newDay){
-  const search = state.days.filter((day) => day.name === newDay);
+  const search = getDayWithName(state.days, newDay);
 
   if (search.length > 0) {
     const appList = search[0].interviewers;
@@ -27,5 +31,8 @@ function getInterviewersForDay(state, newDay){
     return [];
   }
 }
+
+
+
 
 export { getAppointmentsForDay, getInterviewersForDay };
