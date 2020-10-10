@@ -104,6 +104,28 @@ export default function Appointment(props) {
           />
         );
 
+        case SHOW:
+          if (props.interview) {
+            return (
+              <Show
+                onEditClick={() => {
+                  transition(EDIT);
+                }}
+                onDeleteIconClick={() => {
+                  onDeleteIconClick();
+                }}
+                student={props.interview ? props.interview.student : ""}
+                interviewer={getInterviewerForId(
+                  props.interviewers,
+                  props.interview.interviewer
+                )}
+              />
+            );
+          }
+      // Drop into saving on purpose after this if things aren't loaded yet.
+      // TODO: Figure out why this works, and what's breaking it normally
+
+      // eslint-disable-next-line no-fallthrough
       case SAVING:
         return <Status message="Saving interview..." />;
 
@@ -121,24 +143,7 @@ export default function Appointment(props) {
       case DELETING:
         return <Status message="Deleting interview..." />;
 
-      case SHOW:
-        if (props.interview) {
-          return (
-            <Show
-              onEditClick={() => {
-                transition(EDIT);
-              }}
-              onDeleteIconClick={() => {
-                onDeleteIconClick();
-              }}
-              student={props.interview ? props.interview.student : ""}
-              interviewer={getInterviewerForId(
-                props.interviewers,
-                props.interview.interviewer
-              )}
-            />
-          );
-        }
+
 
       case ERROR_SAVE:
         return <Error message="Error saving appointment." onClose={back} />;
