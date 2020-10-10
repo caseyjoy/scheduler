@@ -25,12 +25,7 @@ import DayListItem from "components/DayListItem.jsx";
 export default function DayList(props) {
   return (
     <ul>
-      <List
-        {...props}
-        type="DayList"
-        listItem={DayListItem}
-        compare="name"
-      />
+      <List {...props} type="DayList" listItem={DayListItem} compare="name" />
     </ul>
   );
 }

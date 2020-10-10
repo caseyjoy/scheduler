@@ -48,15 +48,15 @@ export default function Appointment(props) {
         .then(
           // calling these with then and catch instead of passing them directly, to avoid stale state
           (response) => {
+            console.log("What's doing this",response)
             transition(SHOW); // after saving the data, we can then show it
           }
         )
         .catch((error) => {
           transition(ERROR_SAVE); // if it broke, it needs to error out
         });
-    }
-    else {
-      transition(FORGOT)
+    } else {
+      transition(FORGOT);
     }
   }
 
@@ -80,7 +80,7 @@ export default function Appointment(props) {
 
   if (
     mode === SHOW &&
-    (props.interview.student === "" || props.interview.interviewer === null)
+    (!props.interview || props.interview.student === "" || props.interview.interviewer === null)
   ) {
     // if we're showing an appointment, but the student and interviewer are both not set, go back to showing an empty appointment
     transition(EMPTY, REPLACE);
@@ -130,6 +130,7 @@ export default function Appointment(props) {
         return <Status message="Deleting interview..." />;
 
       case SHOW:
+        if(props.interview){
         return (
           <Show
             onEditClick={() => {
@@ -143,8 +144,12 @@ export default function Appointment(props) {
               props.interviewers,
               props.interview.interviewer
             )}
-          />
-        );
+          />)
+            }
+          else {
+          return (<Show student="Loading student name.,," interviewer={null}/>)
+            }
+  
 
       case ERROR_SAVE:
         return <Error message="Error saving appointment." onClose={back} />;
@@ -153,7 +158,12 @@ export default function Appointment(props) {
         return <Error message="Error deleting appointment." onClose={back} />;
 
       case FORGOT:
-        return <Error message="Please enter a student name and select an interviewer before saving." onClose={back} />;
+        return (
+          <Error
+            message="Please enter a student name and select an interviewer before saving."
+            onClose={back}
+          />
+        );
 
       // otherwise, it's just empty
       default:
