@@ -1,4 +1,9 @@
-import { getAppointmentsForDay, getInterviewersForDay } from "helpers/selectors";
+import {
+  getInterviewerForId,
+  getDayWithName,
+  getAppointmentsForDay,
+  getInterviewersForDay,
+} from "helpers/selectors";
 
 const state = {
   interviewers: [
@@ -13,13 +18,13 @@ const state = {
       id: 1,
       name: "Monday",
       appointments: [1, 2, 3],
-      interviewers: [1, 4]
+      interviewers: [1, 4],
     },
     {
       id: 2,
       name: "Tuesday",
       appointments: [4, 5],
-      interviewers: [3, 5, 2]
+      interviewers: [3, 5, 2],
     },
   ],
   appointments: {
@@ -38,6 +43,28 @@ const state = {
     },
   },
 };
+
+/* getInterviewerForId */
+test("getInterviewerForId returns the expected interviewer", () => {
+  const result = getInterviewerForId(state.interviewers, 1);
+  expect(result).toMatchObject(state.interviewers[0]);
+});
+
+test("getInterviewerForId returns null for invalid interviewers", () => {
+  const result = getInterviewerForId(state.interviewers, 1000);
+  expect(result).toBe(null);
+});
+
+/* getDayWithName */
+test("getInterviewerForId returns the expected day", () => {
+  const result = getDayWithName(state.days, "Tuesday");
+  expect(result).toMatchObject(state.days[1]);
+});
+
+test("getInterviewerForId returns null for invalid interviewers", () => {
+  const result = getDayWithName(state.days, "Friday");
+  expect(result).toBe(false);
+});
 
 /* getAppointmentsForDay */
 test("getAppointmentsForDay returns an array", () => {
@@ -66,8 +93,6 @@ test("getAppointmentsForDay returns an empty array when the day is not found", (
   expect(result.length).toEqual(0);
 });
 
-
-
 /* getInterviewersForDay */
 test("getInterviewersForDay returns an array", () => {
   const result = getInterviewersForDay(state, "Monday");
@@ -85,7 +110,6 @@ test("getInterviewersForDay returns an array containing the correct interviewer 
   expect(second).toEqual(state.interviewers["5"]);
   expect(third).toEqual(state.interviewers["2"]);
 });
-
 
 test("getInterviewersForDay returns an empty array when the days data is empty", () => {
   const result = getInterviewersForDay({ days: [] }, "Monday");
