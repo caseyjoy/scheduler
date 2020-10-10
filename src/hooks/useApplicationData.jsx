@@ -104,6 +104,8 @@ export default function useApplicationData() {
       .catch((error) => {
         // TODO: Add an error component for when loading fails
       });
+  // TODO: Figure out why eslint really wants useEffect to have state in the update check array
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { state, setDay, bookInterview, cancelInterview };

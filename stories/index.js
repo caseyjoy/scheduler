@@ -126,10 +126,7 @@ storiesOf("InterviewerList", module)
     backgrounds: [{ name: "dark", value: "#222f3e", default: true }],
   })
   .add("Initial", () => (
-    <InterviewerList
-      items={interviewers}
-      setItem={action("setInterviewer")}
-    />
+    <InterviewerList items={interviewers} setItem={action("setInterviewer")} />
   ))
   .add("Preselected", () => (
     <InterviewerList
@@ -197,7 +194,7 @@ storiesOf("Appointment", module)
         id={1}
         time="12pm"
         interviewers={interviewers}
-        interview={{ student: "Lydia Miller-Jones", interviewer:0 }}
+        interview={{ student: "Lydia Miller-Jones", interviewer: 0 }}
       />
       <Appointment id="last" time="1pm" />
     </Fragment>
