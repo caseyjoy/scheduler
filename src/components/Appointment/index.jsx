@@ -48,7 +48,7 @@ export default function Appointment(props) {
         .then(
           // calling these with then and catch instead of passing them directly, to avoid stale state
           (response) => {
-            console.log("What's doing this",response)
+            console.log("What's doing this", response);
             transition(SHOW); // after saving the data, we can then show it
           }
         )
@@ -76,14 +76,6 @@ export default function Appointment(props) {
   function onDeleteIconClick(name, interviewer) {
     // When the trash bin icon is clicked, we need to show the confirmation component first
     transition(CONFIRM);
-  }
-
-  if (
-    mode === SHOW &&
-    (!props.interview || props.interview.student === "" || props.interview.interviewer === null)
-  ) {
-    // if we're showing an appointment, but the student and interviewer are both not set, go back to showing an empty appointment
-    transition(EMPTY, REPLACE);
   }
 
   // the component that gets drawn after the header
@@ -130,26 +122,23 @@ export default function Appointment(props) {
         return <Status message="Deleting interview..." />;
 
       case SHOW:
-        if(props.interview){
-        return (
-          <Show
-            onEditClick={() => {
-              transition(EDIT);
-            }}
-            onDeleteIconClick={() => {
-              onDeleteIconClick();
-            }}
-            student={props.interview ? props.interview.student : ""}
-            interviewer={getInterviewerForId(
-              props.interviewers,
-              props.interview.interviewer
-            )}
-          />)
-            }
-          else {
-          return (<Show student="Loading student name.,," interviewer={null}/>)
-            }
-  
+        if (props.interview) {
+          return (
+            <Show
+              onEditClick={() => {
+                transition(EDIT);
+              }}
+              onDeleteIconClick={() => {
+                onDeleteIconClick();
+              }}
+              student={props.interview ? props.interview.student : ""}
+              interviewer={getInterviewerForId(
+                props.interviewers,
+                props.interview.interviewer
+              )}
+            />
+          );
+        }
 
       case ERROR_SAVE:
         return <Error message="Error saving appointment." onClose={back} />;
