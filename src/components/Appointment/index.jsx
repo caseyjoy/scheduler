@@ -48,7 +48,6 @@ export default function Appointment(props) {
         .then(
           // calling these with then and catch instead of passing them directly, to avoid stale state
           (response) => {
-            console.log("What's doing this", response);
             transition(SHOW); // after saving the data, we can then show it
           }
         )
