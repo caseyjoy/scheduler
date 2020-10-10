@@ -1,7 +1,6 @@
 import React from "react";
 
 import List from "components/List.jsx";
-
 import InterviewerListItem from "./InterviewerListItem.jsx";
 import "components/InterviewerList.scss";
 

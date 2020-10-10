@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import classnames from "classnames";
 
@@ -30,7 +28,7 @@ export default function DayListItem(props) {
   );
 
   return (
-     <li className={classes} onClick={() => props.setDay(props.name)}>
+     <li className={classes} onClick={() => props.onChange(props.name)}>
       <h2 className="text--regular">{props.name}</h2>
       <h3 className="text--light">{formattedSpots}</h3>
     </li> 
