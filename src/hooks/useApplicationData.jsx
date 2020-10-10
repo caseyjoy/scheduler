@@ -27,23 +27,26 @@ export default function useApplicationData() {
       [id]: appointment,
     };
 
-    // send the changed appointments data object to the server
-    return axios.put(`/api/appointments/${id}`, appointment).then((response) => {
-      // TODO: should only do this if it works
-      // decrement the spots for the day since one is added, client side
-      const days = [...state.days].map((day) => {
-        if (state.day === day.name) {
-          return { ...day, spots: day.spots - 1 };
-        }
+    // send the changed appointments data object to the server. This returns a promise to Appointment index.js's save function
+    return axios
+      .put(`/api/appointments/${id}`, appointment)
+      .then((response) => {
+        // TODO: should only do this if it works
+        // decrement the spots for the day since one is added, client side
+        const days = [...state.days].map((day) => {
+          if (state.day === day.name) {
+            return { ...day, spots: day.spots - 1 };
+          }
 
-        return day;
+          return day;
+        });
+
+        setState({ ...state, appointments: appointments, days: days });
+        return Promise.resolve(response);
+      })
+      .catch((error) => {
+        return Promise.reject(error);
       });
-
-      setState({ ...state, appointments: appointments, days: days });
-      //return Promise.resolve(response);
-    }).catch((error) => {
-      return Promise.reject(error)
-    });
   }
 
   // similar to bookInterview, onyl we remove all the data and then send appointments back with an empty one
@@ -51,43 +54,56 @@ export default function useApplicationData() {
     // create an empty appointment, and then store it in a new copy of appointments so we can use it to update the client
     const appointment = {
       ...state.appointments[id],
-      interview: null
-    }; 
+      interview: null,
+    };
 
     const appointments = {
       ...state.appointments,
       [id]: appointment,
     };
 
-    return axios.delete(`/api/appointments/${id}`)
-    .then((response) => {
-      // increment the spots for the day since one is removed, client side
-      const days = [...state.days].map(day => state.day === day.name ? { ...day, spots: day.spots + 1 } : day);
-      setState({ ...state, appointments: appointments, days: days });
-    }).catch((error) => {
-      return Promise.reject(error)
-    });
+    // send a delete request to the server. This returns a promise to Appointment index.js's onDelete function
+    return axios
+      .delete(`/api/appointments/${id}`)
+      .then((response) => {
+        // increment the spots for the day since one is removed, client side
+        const days = [...state.days].map((day) =>
+          state.day === day.name ? { ...day, spots: day.spots + 1 } : day
+        );
+        setState({ ...state, appointments: appointments, days: days });
+        return Promise.resolve(response);
+      })
+      .catch((error) => {
+        return Promise.reject(error);
+      });
   }
 
-  // TODO: Fix this to use error handling
   useEffect(() => {
-    const first = axios.get("/api/days");
-    const second = axios.get("/api/appointments");
-    const third = axios.get("/api/interviewers");
+    function getDays() {
+      return axios.get("/api/days");
+    }
 
-    Promise.all([
-      Promise.resolve(first),
-      Promise.resolve(second),
-      Promise.resolve(third),
-    ]).then((all) => {
-      const [first, second, third] = all;
-      setState({
-        ...state,
-        days: first.data,
-        appointments: second.data,
-        interviewers: third.data,
+    function getAppointments() {
+      return axios.get("/api/appointments");
+    }
+
+    function getInterviewers() {
+      return axios.get("/api/interviewers");
+    }
+
+    Promise.all([getDays(), getAppointments(), getInterviewers()])
+      .then(function (results) {
+        const [days, appointments, interviewers] = results;
+        setState({
+          ...state,
+          days: days.data,
+          appointments: appointments.data,
+          interviewers: interviewers.data,
+        });
+      })
+      .catch((error) => {
+        // TODO: Add an error component for when loading fails
       });
-    });
   }, []);
 
   return { state, setDay, bookInterview, cancelInterview };
