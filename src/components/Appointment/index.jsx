@@ -21,7 +21,8 @@ const SAVING = "SAVING";
 const DELETING = "DELETING";
 const CONFIRM = "CONFIRM";
 const ERROR_SAVE = "ERROR_SAVE";
-const ERROR_DELETE = " ERROR_DELETE";
+const ERROR_DELETE = "ERROR_DELETE";
+const FORGOT = "FORGOT";
 
 // only really used for calling transition when replacing, to make it more obvious what it's doing
 const REPLACE = true;
@@ -53,6 +54,9 @@ export default function Appointment(props) {
         .catch((error) => {
           transition(ERROR_SAVE); // if it broke, it needs to error out
         });
+    }
+    else {
+      transition(FORGOT)
     }
   }
 
@@ -147,6 +151,9 @@ export default function Appointment(props) {
 
       case ERROR_DELETE:
         return <Error message="Error deleting appointment." onClose={back} />;
+
+      case FORGOT:
+        return <Error message="Please enter a student name and select an interviewer before saving." onClose={back} />;
 
       // otherwise, it's just empty
       default:
