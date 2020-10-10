@@ -48,8 +48,6 @@ export default function useApplicationData() {
 
   // similar to bookInterview, onyl we remove all the data and then send appointments back with an empty one
   function cancelInterview(id) {
-  /*   console.log(state.appointments) */
-
     // create an empty appointment, and then store it in a new copy of appointments so we can use it to update the client
     const appointment = {
       ...state.appointments[id],

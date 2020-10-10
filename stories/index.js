@@ -70,13 +70,13 @@ storiesOf("DayList", module)
     backgrounds: [{ name: "dark", value: "#222f3e", default: true }],
   })
   .add("Monday", () => (
-    <DayList days={days} day={"Monday"} setDay={action("setDay")} />
+    <DayList items={days} value={"Monday"} setItem={action("setDay")} />
   ))
   .add("Tuesday", () => (
-    <DayList days={days} day={"Tuesday"} setDay={action("setDay")} />
+    <DayList items={days} value={"Tuesday"} setItem={action("setDay")} />
   ))
   .add("Wednesday", () => (
-    <DayList days={days} day={"Wednesday"} setDay={action("setDay")} />
+    <DayList items={days} value={"Wednesday"} setItem={action("setDay")} />
   ));
 
 const interviewer = {
@@ -127,15 +127,15 @@ storiesOf("InterviewerList", module)
   })
   .add("Initial", () => (
     <InterviewerList
-      interviewers={interviewers}
-      setInterviewer={action("setInterviewer")}
+      items={interviewers}
+      setItem={action("setInterviewer")}
     />
   ))
   .add("Preselected", () => (
     <InterviewerList
-      interviewers={interviewers}
-      interviewer={3}
-      setInterviewer={action("setInterviewer")}
+      items={interviewers}
+      value={3}
+      setItem={action("setInterviewer")}
     />
   ));
 

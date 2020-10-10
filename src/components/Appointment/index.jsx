@@ -23,7 +23,7 @@ const CONFIRM = "CONFIRM";
 const ERROR_SAVE = "ERROR_SAVE";
 const ERROR_DELETE = " ERROR_DELETE";
 
-// only really used for calling transition when replacing
+// only really used for calling transition when replacing, to make it more obvious what it's doing
 const REPLACE = true;
 
 // the main appointment component, swaps between displaying multiple subcomponents depending on mode
@@ -159,8 +159,6 @@ export default function Appointment(props) {
         );
     }
   })();
-
-  console.log("what is element:", element, typeof element);
 
   // show the time header, and the component element we picked above
   return (

@@ -14,7 +14,7 @@ export default function InterviewerListItem(props) {
       id={props.id}
       className={newClassName}
       onClick={() => {
-        props.setInterviewer(props.id);
+        props.onChange(props.id);
       }}
       selected={props.selected}
     >

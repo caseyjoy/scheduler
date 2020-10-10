@@ -19,6 +19,7 @@ export default function Form (props) {
     props.onSave(name, selectedInterviewer);
   }
   
+  // props.onCancel can just be called directly to change the mode, since we don't persist the student and interviewer data after that
   return (
     <main className="appointment__card appointment__card--create">
       <section className="appointment__card-left">
@@ -33,10 +34,9 @@ export default function Form (props) {
           />
         </form>
         <InterviewerList
-          interviewers={props.interviewers}
+          items={props.interviewers}
           value={selectedInterviewer}
-          selectedInterviewer={selectedInterviewer}
-          setInterviewer={setInterviewer}
+          onChange={setInterviewer}
         />
       </section>
 
@@ -54,5 +54,3 @@ export default function Form (props) {
     </main>
   );
 }
-
-////
